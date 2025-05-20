@@ -3,6 +3,7 @@ package com.apt.blog.services.impl;
 import com.apt.blog.domain.entities.Category;
 import com.apt.blog.repositories.CategoryRepository;
 import com.apt.blog.services.CategoryService;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,5 +20,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> listCategories() {
         return categoryRepository.findAllWithPostCount();
+    }
+
+    @Override
+    @Transactional
+    public Category createCategory(Category category) {
+        if (categoryRepository.existsByNameIgnoreCase(category.getName())) {
+            throw new IllegalArgumentException("Category already exists with name: " + category.getName());
+        }
+        return categoryRepository.save(category);
     }
 }
