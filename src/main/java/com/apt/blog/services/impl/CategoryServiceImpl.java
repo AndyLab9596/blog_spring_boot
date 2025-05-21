@@ -3,6 +3,7 @@ package com.apt.blog.services.impl;
 import com.apt.blog.domain.entities.Category;
 import com.apt.blog.repositories.CategoryRepository;
 import com.apt.blog.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,11 @@ public class CategoryServiceImpl implements CategoryService {
             }
             categoryRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public Category getCategoryById(UUID id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
     }
 }

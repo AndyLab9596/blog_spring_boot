@@ -1,7 +1,7 @@
 package com.apt.blog.controllers;
 
 import com.apt.blog.domain.dtos.CreateTagRequest;
-import com.apt.blog.domain.dtos.TagResponse;
+import com.apt.blog.domain.dtos.TagDto;
 import com.apt.blog.domain.entities.Tag;
 import com.apt.blog.mapper.TagMapper;
 import com.apt.blog.services.TagService;
@@ -25,18 +25,18 @@ public class TagController {
     private final TagMapper tagMapper;
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
+    public ResponseEntity<List<TagDto>> getAllTags() {
         List<Tag> tags = tagService.getTags();
-        List<TagResponse> tagResponses = tags.stream().map(tagMapper::toTagResponse).toList();
-        return ResponseEntity.ok(tagResponses);
+        List<TagDto> tagRespons = tags.stream().map(tagMapper::toTagResponse).toList();
+        return ResponseEntity.ok(tagRespons);
     }
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTags(@RequestBody @Valid CreateTagRequest createTagRequest) {
+    public ResponseEntity<List<TagDto>> createTags(@RequestBody @Valid CreateTagRequest createTagRequest) {
         List<Tag> savedTags = tagService.createTags(createTagRequest.getNames());
-        List<TagResponse> createdTagResponses = savedTags.stream().map(tagMapper::toTagResponse).toList();
+        List<TagDto> createdTagRespons = savedTags.stream().map(tagMapper::toTagResponse).toList();
         return new ResponseEntity<>(
-                createdTagResponses,
+                createdTagRespons,
                 HttpStatus.CREATED
         );
     }
